@@ -8,6 +8,8 @@ export const QuizProvider = ({ children }) => {
   const [correct, setIsCorrect] = useState(null);
   const [choices, setChoices] = useState([]);
   const [countries, setCountries] = useState([]);
+  const [score, setScore] = useState(0);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     loadCountries();
@@ -32,8 +34,10 @@ export const QuizProvider = ({ children }) => {
   const getChoices = () => {
     let randomSelection = [];
     for (var i = 0; i < 4; i++) {
-      let country = {};
-      country = countries[Math.floor(Math.random() * countries.length)];
+      // currently clone the object so its not linked to the original
+      const country = structuredClone(
+        countries[Math.floor(Math.random() * countries.length)]
+      );
       randomSelection.push(country);
     }
     setChoices(randomSelection);
@@ -41,19 +45,21 @@ export const QuizProvider = ({ children }) => {
     randomSelection[0] !== undefined
       ? setAnswer(randomSelection)
       : setIsLoading(true);
-    console.log(randomSelection);
   };
 
   const setAnswer = (selection) => {
     const random = Math.floor(Math.random() * selection.length);
-    console.log(selection[random]);
     selection[random].answer = true;
     setIsLoading(false);
+    let newTotal = total + 1;
+    setTotal(newTotal);
   };
 
   const checkAnswer = (item) => {
     if (item.answer) {
       setIsCorrect(true);
+      let newScore = score + 1;
+      setScore(newScore);
     } else {
       setIsCorrect(false);
     }
@@ -76,6 +82,8 @@ export const QuizProvider = ({ children }) => {
         correct,
         isLoading,
         nextQuestion,
+        score,
+        total,
       }}
     >
       {children}

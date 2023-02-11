@@ -1,4 +1,5 @@
 import QuizContext from '../../context/QuizContext';
+import Score from './Score';
 import { useContext } from 'react';
 
 function Question() {
@@ -57,8 +58,12 @@ function Question() {
         </div>
       </div>
 
+      <Score />
+
       <div className='grid place-items-center m-5'>
-        <img src={answer.flag} alt='Flag' />
+        <div className='border'>
+          <img src={answer.flag} alt='Flag' />
+        </div>
       </div>
     </>
   );
